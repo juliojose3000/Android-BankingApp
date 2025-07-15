@@ -1,4 +1,4 @@
-package com.loaizasoftware.bankingapp.ui.theme
+package com.loaizasoftware.bankingapp.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build

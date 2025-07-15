@@ -49,14 +49,6 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":feature_login"))
 
-    // ------------------------------------------------------
-    // 🔐 DEPENDENCY INJECTION
-    // ------------------------------------------------------
-
-    //Hilt
-    implementation("com.google.dagger:hilt-android:2.56.2")
-    ksp("com.google.dagger:hilt-android-compiler:2.56.2")
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -65,10 +57,28 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("androidx.navigation:navigation-compose:2.9.0") //Compose Navigation
+
+    // ------------------------------------------------------
+    // 🧰 Utilities
+    // ------------------------------------------------------
+
+    //Room
+    //val room_version = "2.6.1" // Use the latest stable version
+    implementation("androidx.room:room-runtime:2.7.2")
+    annotationProcessor("androidx.room:room-compiler:2.7.2") // For Java
+    ksp("androidx.room:room-compiler:2.7.2") // For Kotlin
+
+    // ------------------------------------------------------
+    // 🔐 DEPENDENCY INJECTION
+    // ------------------------------------------------------
+
+    //Hilt
+    implementation("com.google.dagger:hilt-android:2.56.2")
+    ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+
+
     testImplementation(libs.junit)
-
-
-
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

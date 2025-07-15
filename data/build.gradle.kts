@@ -52,6 +52,17 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
+
+    // ------------------------------------------------------
+    // 🧰 Utilities
+    // ------------------------------------------------------
+
+    //Room
+    //val room_version = "2.6.1" // Use the latest stable version
+    implementation("androidx.room:room-runtime:2.7.2")
+    annotationProcessor("androidx.room:room-compiler:2.7.2") // For Java
+    ksp("androidx.room:room-compiler:2.7.2") // For Kotlin
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

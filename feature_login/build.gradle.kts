@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose) //Enable Compose
 
     id("com.google.devtools.ksp")  //Kotlin Symbol Processing
     id("com.google.dagger.hilt.android")
@@ -34,15 +35,30 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
 
+    implementation(project(":core"))
     implementation(project(":domain"))
 
+    // ----------------------------
+    // 🔷 ANDROID X
+    // ----------------------------
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0") // Lifecycle ViewModel
+
+    // ----------------------------
+    // 🧩 COMPOSE CORE
+    // ----------------------------
+    implementation(platform("androidx.compose:compose-bom:2024.03.00")) // Compose BOM (manages all Compose versions)
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3") //To use Box, Column, Row, Scaffold, etc
+    implementation("androidx.compose.ui:ui-tooling-preview")
 
     // ------------------------------------------------------
     // 🔐 DEPENDENCY INJECTION
