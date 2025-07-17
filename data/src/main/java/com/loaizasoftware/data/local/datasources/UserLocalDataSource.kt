@@ -6,16 +6,21 @@ import com.loaizasoftware.data.local.entity.toEntity
 import com.loaizasoftware.domain.models.SignInRequest
 import com.loaizasoftware.domain.models.SignInResponse
 import com.loaizasoftware.domain.models.User
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class UserLocalDataSource @Inject constructor(private val userDao: UserDao) {
 
     suspend fun signIn(request: SignInRequest): SignInResponse {
+
+        delay(3000)
+
         val userEntity = userDao.authenticate(request.username, request.password)
 
         return if (userEntity != null) {
             SignInResponse(
                 data = userEntity.toDomain(),
+                isSuccessful = true,
                 message = "User authenticated successfully",
                 code = 200,
                 token = generateMockToken() // This should ideally be from backend
@@ -23,6 +28,7 @@ class UserLocalDataSource @Inject constructor(private val userDao: UserDao) {
         } else {
             SignInResponse(
                 data = null,
+                isSuccessful = false,
                 message = "Invalid credentials",
                 code = 401,
                 token = ""

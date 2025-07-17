@@ -10,25 +10,29 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.loaizasoftware.core.ext.showToast
 import com.loaizasoftware.core.utils.UiState
+import com.loaizasoftware.core_ui.composables.Loader
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel) {
 
     val uiState = viewModel.uiState.collectAsState().value
+    val context = LocalContext.current
 
     Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
 
         when(uiState) {
 
             is UiState.Error -> {
-                //Show error
+                context showToast uiState.error
             }
 
             is UiState.Loading -> {
-                //Show Loader
+                Loader()
             }
 
             is UiState.Success -> {

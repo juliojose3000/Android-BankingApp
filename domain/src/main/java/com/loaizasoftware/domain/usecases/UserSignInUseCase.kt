@@ -9,12 +9,7 @@ import javax.inject.Inject
 class UserSignInUseCase @Inject constructor(private val userRepository: UserRepository): UseCase<SignInRequest, Result<SignInResponse>>() {
 
     override suspend fun invoke(params: SignInRequest): Result<SignInResponse> {
-        return try {
-            val result = userRepository.signIn(params)
-            Result.success(result)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return userRepository.signIn(params)
     }
 
 }
