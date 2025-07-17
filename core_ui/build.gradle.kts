@@ -1,14 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-
-    id("com.google.devtools.ksp")  //Kotlin Symbol Processing
-    id("com.google.dagger.hilt.android")
-
+    alias(libs.plugins.kotlin.compose) //Enable Compose
 }
 
 android {
-    namespace = "com.loaizasoftware.data"
+    namespace = "com.loaizasoftware.core_ui"
     compileSdk = 35
 
     defaultConfig {
@@ -34,34 +31,25 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
-
-    implementation(project(":domain"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // ------------------------------------------------------
-    // 🔐 DEPENDENCY INJECTION
-    // ------------------------------------------------------
+    // ----------------------------
+    // 🧩 COMPOSE CORE
+    // ----------------------------
+    implementation(platform("androidx.compose:compose-bom:2024.03.00")) // Compose BOM (manages all Compose versions)
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3") //To use Box, Column, Row, Scaffold, etc
+    implementation("androidx.compose.ui:ui-tooling-preview")
 
-    //Hilt
-    implementation("com.google.dagger:hilt-android:2.56.2")
-    ksp("com.google.dagger:hilt-android-compiler:2.56.2")
-
-
-    // ------------------------------------------------------
-    // 🧰 Utilities
-    // ------------------------------------------------------
-
-    //Room
-    //val room_version = "2.6.1" // Use the latest stable version
-    implementation("androidx.room:room-runtime:2.7.2")
-    annotationProcessor("androidx.room:room-compiler:2.7.2") // For Java
-    ksp("androidx.room:room-compiler:2.7.2") // For Kotlin
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

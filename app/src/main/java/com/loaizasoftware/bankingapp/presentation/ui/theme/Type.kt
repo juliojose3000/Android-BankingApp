@@ -1,4 +1,4 @@
-package com.loaizasoftware.bankingapp.ui.theme
+package com.loaizasoftware.bankingapp.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
