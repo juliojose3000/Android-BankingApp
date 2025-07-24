@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_in_greeting">Buenas noches</string>
+    <string name="sign_in_placeholder_user">Usuario</string>
+    <string name="sign_in_with_fingerprint">Ingresar con huella</string>
+    <string name="sign_in_with_password">o ingrese con contraseña</string>
+    <string name="sign_in_client_or_create_user">¿Quieres ser cliente o crear usuario?</string>
+
+</resources>
