@@ -60,6 +60,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3") //To use Box, Column, Row, Scaffold, etc
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1") //Constraint Layout
 
     // ------------------------------------------------------
     // 🔐 DEPENDENCY INJECTION
@@ -70,7 +71,9 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
 
+    debugImplementation(libs.ui.tooling)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
 }
