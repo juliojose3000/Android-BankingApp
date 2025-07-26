@@ -6,4 +6,10 @@
     <string name="sign_in_with_password">o ingrese con contraseña</string>
     <string name="sign_in_client_or_create_user">¿Quieres ser cliente o crear usuario?</string>
 
+    <string name="sign_in_currency_exchange">Tipo de Cambio</string>
+    <string name="sign_in_code">Código BAK</string>
+    <string name="sign_in_help">Ayuda</string>
+    <string name="sign_in_locate_us">Ubícanos</string>
+    <string name="sign_in_offers">Promosiones</string>
+    <string name="sign_in_compass">Compass</string>
 </resources>

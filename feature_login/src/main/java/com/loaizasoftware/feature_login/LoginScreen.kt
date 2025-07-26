@@ -1,6 +1,14 @@
 package com.loaizasoftware.feature_login
 
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -23,16 +32,21 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asComposeRenderEffect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,40 +65,148 @@ import com.loaizasoftware.core_ui.composables.Loader
 import com.loaizasoftware.core_ui.resources.BankingColors
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
+
+@RequiresApi(Build.VERSION_CODES.S)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(viewModel: LoginViewModel) {
 
     val uiState = viewModel.uiState.collectAsState().value
     val context = LocalContext.current
+    val sheetState = rememberBottomSheetScaffoldState()
+    val scope = rememberCoroutineScope() // Add this for coroutine scope
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
+    // Animated blur radius based on sheet expansion
+    val blurRadius by animateFloatAsState(
+        targetValue = when (sheetState.bottomSheetState.currentValue) {
+            SheetValue.Expanded -> 8f
+            SheetValue.PartiallyExpanded -> 0f
+            SheetValue.Hidden -> 0f
+        },
+        animationSpec = tween(durationMillis = 300),
+        label = "blur_animation"
+    )
 
-        when(uiState) {
+    // Animated overlay alpha
+    val overlayAlpha by animateFloatAsState(
+        targetValue = when (sheetState.bottomSheetState.currentValue) {
+            SheetValue.Expanded -> 0.2f
+            SheetValue.PartiallyExpanded -> 0.1f
+            SheetValue.Hidden -> 0f
+        },
+        animationSpec = tween(durationMillis = 150),
+        label = "overlay_animation"
+    )
 
-            is UiState.Error -> {
-                context showToast uiState.error
+
+    // BottomSheetScaffold should be the root composable
+    BottomSheetScaffold(
+        modifier = Modifier
+            .fillMaxSize() // Apply the modifier to the scaffold
+            .background(Color.Blue),
+        scaffoldState = sheetState, // Pass the state
+        sheetContent = {
+            FooterContent(
+                onItemClick = { action ->
+                    // Expand when footer item is clicked
+                    scope.launch {
+                        if (!sheetState.bottomSheetState.isVisible) {
+                            sheetState.bottomSheetState.expand()
+                        } else {
+                            sheetState.bottomSheetState.hide()
+                        }
+                    }
+                },
+                isExpanded = sheetState.bottomSheetState.isVisible
+            )
+        },
+        sheetPeekHeight = 110.dp, // Height of the visible bottom sheet
+        sheetContainerColor = Color.White,
+        containerColor = BankingColors.WhiteBackground,
+        sheetDragHandle = {
+            // Optional: Add a drag handle to indicate it's draggable
+            Box(
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .width(80.dp)
+                    .height(4.dp)
+                    .background(
+                        Color.Gray.copy(alpha = 0.3f),
+                        RoundedCornerShape(2.dp)
+                    )
+            )
+        }
+    ) { padding ->
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .graphicsLayer {
+                    renderEffect = if (blurRadius > 0f) {
+                        RenderEffect
+                            .createBlurEffect(
+                                blurRadius,
+                                blurRadius,
+                                Shader.TileMode.CLAMP
+                            )
+                            .asComposeRenderEffect()
+                    } else {
+                        null
+                    }
+                }
+        ) {
+
+            // Your main content
+            when (uiState) {
+                is UiState.Error -> {
+                    context showToast uiState.error
+                }
+
+                is UiState.Loading -> {
+                    Loader()
+                }
+
+                is UiState.Success -> {
+                    BuildUI(
+                        paddingValues = padding,
+                        onClick = { },
+                        usernameTextFieldOnValueChange = viewModel::onUsernameTextFieldValueChange,
+                        usernameTextFieldValue = viewModel.usernameTextFieldMutableState
+                    )
+                }
             }
 
-            is UiState.Loading -> {
-                Loader()
-            }
+        }
 
-            is UiState.Success -> {
-                BuildUI(
-                    paddingValues = padding,
-                    onClick = {
+        // ✅ Overlay sits inside the content layer now
+        if (overlayAlpha > 0.1f) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = overlayAlpha))
+                    .noRippleClickable {
+                        scope.launch {
+                            sheetState.bottomSheetState.partialExpand()
+                        }
+                    }
+            )
 
-                    },
-                    usernameTextFieldOnValueChange = viewModel::onUsernameTextFieldValueChange,
-                    usernameTextFieldValue = viewModel.usernameTextFieldMutableState
-                )
-            }
 
         }
 
     }
 
+}
+
+inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
+    clickable(
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() }) {
+        onClick()
+    }
 }
 
 @Composable
@@ -95,7 +217,7 @@ fun BuildUI(
     usernameTextFieldValue: StateFlow<String>
 ) {
 
-    ConstraintLayout (
+    ConstraintLayout(
         modifier = Modifier
             .padding(
                 top = paddingValues.calculateTopPadding(),
@@ -107,7 +229,7 @@ fun BuildUI(
             .background(BankingColors.WhiteBackground)
     ) {
 
-        val (headerRef, bodyRef, bodyBottomRef, footerModifierRef) = createRefs()
+        val (headerRef, bodyRef, bodyBottomRef) = createRefs()
 
         val headerModifier = Modifier
             .background(BankingColors.Red)
@@ -140,16 +262,6 @@ fun BuildUI(
             }
             .padding(20.dp)
 
-        val footerModifier = Modifier
-            .background(Color.Gray)
-            .constrainAs(footerModifierRef) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-                width = Dimension.fillToConstraints
-            }
-
-
         Header(modifier = headerModifier)
 
         Body(
@@ -159,8 +271,6 @@ fun BuildUI(
         )
 
         BodyBottom(modifier = bodyBottomModifier)
-
-        Footer(modifier = footerModifier)
 
     }
 
@@ -203,7 +313,11 @@ fun Header(modifier: Modifier) {
 
 
 @Composable
-fun Body(modifier: Modifier, onValueChange: (String) -> Unit, usernameTextFieldValue: StateFlow<String>) {
+fun Body(
+    modifier: Modifier,
+    onValueChange: (String) -> Unit,
+    usernameTextFieldValue: StateFlow<String>
+) {
 
     val username by usernameTextFieldValue.collectAsState() //In Jetpack Compose, you should collect flows using collectAsState(), so the composition can automatically update when the value changes.
 
@@ -299,7 +413,10 @@ fun BodyBottom(modifier: Modifier) {
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Text(text = stringResource(R.string.sign_in_client_or_create_user))
+        Text(
+            text = stringResource(R.string.sign_in_client_or_create_user),
+            color = Color.Gray
+        )
 
         Spacer(modifier = Modifier.width(8.dp))
 
@@ -314,90 +431,102 @@ fun BodyBottom(modifier: Modifier) {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+// Updated FooterContent with click handling and expanded content
 @Composable
-fun Footer(modifier: Modifier) {
-    val sheetState = rememberBottomSheetScaffoldState()
+fun FooterContent(
+    onItemClick: (String) -> Unit = {},
+    isExpanded: Boolean = false
+) {
+    val footerActions: List<Triple<Int, Int, String>> = listOf(
+        Triple(R.drawable.currency_exchange, R.string.sign_in_currency_exchange, "exchange"),
+        Triple(R.drawable.lock, R.string.sign_in_code, "code"),
+        Triple(R.drawable.search, R.string.sign_in_help, "help")
+    )
 
-    // BottomSheetScaffold should be the root composable
-    BottomSheetScaffold(
-        modifier = modifier, // Apply the modifier to the scaffold
-        scaffoldState = sheetState, // Pass the state
-        sheetContent = {
-            FooterContent()
-        },
-        sheetPeekHeight = 130.dp, // Height of the visible bottom sheet
-        sheetContainerColor = Color.White,
-    ) { _ ->
-        // Your main screen content
+    val footerExpandedActions: List<Triple<Int, Int, String>> = listOf(
+        Triple(R.drawable.location, R.string.sign_in_locate_us, "locate_us"),
+        Triple(R.drawable.discount, R.string.sign_in_offers, "offers"),
+        Triple(R.drawable.compass, R.string.sign_in_compass, "compass")
+    )
 
-
-
-    }
-}
-
-@Composable
-fun FooterContent() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp)
     ) {
-
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+        // Always visible footer actions
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            Icon(
-                painter = painterResource(R.drawable.currency_exchange),
-                contentDescription = "",
-                modifier = Modifier.size(30.dp),
-                tint = Color.LightGray
-            )
+            footerActions.forEach {
 
-            Text("Tipo de Cambio")
+                val modifier = Modifier
+                    .weight(1f)
+                    .clickable { onItemClick(it.third) }
 
+                FooterActionButton(modifier = modifier, itemData = it)
+
+            }
         }
 
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
+        // Expanded content - only shown when expanded
+        if (isExpanded) {
 
-            Icon(
-                painter = painterResource(R.drawable.lock),
-                contentDescription = "",
-                modifier = Modifier.size(30.dp),
-                tint = Color.LightGray
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
 
-            Text("Código BAC")
+                footerExpandedActions.forEach {
 
-        }
+                    val modifier = Modifier
+                        .weight(1f)
+                        .clickable { onItemClick(it.third) }
 
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
+                    FooterActionButton(modifier = modifier, itemData = it)
 
-            Icon(
-                painter = painterResource(R.drawable.search),
-                contentDescription = "",
-                modifier = Modifier.size(30.dp),
-                tint = Color.LightGray
-            )
-
-            Text("Ayuda")
+                }
+            }
 
         }
-
     }
 }
 
+@Composable
+fun FooterActionButton(
+    modifier: Modifier,
+    itemData: Triple<Int, Int, String>
+) {
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Icon(
+            painter = painterResource(itemData.first),
+            contentDescription = "",
+            modifier = Modifier.size(30.dp),
+            tint = Color.LightGray
+        )
+
+        Text(
+            text = stringResource(itemData.second),
+            style = TextStyle(
+                color = Color.Gray,
+                fontSize = 12.sp
+            )
+        )
+    }
+
+}
 
 
 @Composable
