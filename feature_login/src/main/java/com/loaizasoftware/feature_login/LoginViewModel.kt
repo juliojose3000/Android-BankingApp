@@ -22,6 +22,9 @@ class LoginViewModel @Inject constructor(private val signInUseCase: UserSignInUs
     private val _usernameTextFieldMutableState = MutableStateFlow("")
     val usernameTextFieldMutableState: StateFlow<String> = _usernameTextFieldMutableState.asStateFlow()
 
+    private val _passwordTextFieldMutableState = MutableStateFlow("")
+    val passwordTextFieldMutableState: StateFlow<String> = _passwordTextFieldMutableState.asStateFlow()
+
     fun signIn(username: String, password: String) {
 
         _uiState.value = UiState.Loading
@@ -40,8 +43,12 @@ class LoginViewModel @Inject constructor(private val signInUseCase: UserSignInUs
 
     }
 
-    fun onUsernameTextFieldValueChange(value: String) {
+    fun setUsernameValue(value: String) {
         _usernameTextFieldMutableState.value = value
+    }
+
+    fun setPasswordValue(value: String) {
+        _passwordTextFieldMutableState.value = value
     }
 
 }
