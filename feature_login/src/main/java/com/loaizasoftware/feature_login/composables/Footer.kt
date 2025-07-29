@@ -27,15 +27,15 @@ fun FooterContent(
     isExpanded: Boolean = false
 ) {
     val footerActions: List<Triple<Int, Int, String>> = listOf(
-        Triple(R.drawable.currency_exchange, R.string.sign_in_currency_exchange, "exchange"),
-        Triple(R.drawable.lock, R.string.sign_in_code, "code"),
-        Triple(R.drawable.search, R.string.sign_in_help, "help")
+        Triple(R.drawable.currency_exchange, R.string.currency_exchange, "exchange"),
+        Triple(R.drawable.lock, R.string.code, "code"),
+        Triple(R.drawable.search, R.string.help, "help")
     )
 
     val footerExpandedActions: List<Triple<Int, Int, String>> = listOf(
-        Triple(R.drawable.location, R.string.sign_in_locate_us, "locate_us"),
-        Triple(R.drawable.discount, R.string.sign_in_offers, "offers"),
-        Triple(R.drawable.compass, R.string.sign_in_compass, "compass")
+        Triple(R.drawable.location, R.string.locate_us, "locate_us"),
+        Triple(R.drawable.discount, R.string.offers, "offers"),
+        Triple(R.drawable.compass, R.string.compass, "compass")
     )
 
     Column(

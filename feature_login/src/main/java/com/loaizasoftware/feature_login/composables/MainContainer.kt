@@ -1,5 +1,6 @@
 package com.loaizasoftware.feature_login.composables
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,7 +54,8 @@ fun MainContainer(
 
         val bodyModifier = Modifier
             .background(Color.White)
-            .height(350.dp)
+            .wrapContentHeight()
+            .animateContentSize() //To animate when the content height changes between sign in with password or fingerprint
             //.fillMaxWidth() //In ConstraintLayout, you don't need fillMaxWidth(). The constraints define the width.
             .constrainAs(bodyRef) {
                 top.linkTo(headerRef.bottom, margin = (-65).dp)
