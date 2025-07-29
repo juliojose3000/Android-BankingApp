@@ -79,3 +79,7 @@ Development Process:
 - Add performance monitoring
 
 The project appears to be well-structured and uses modern Android development practices. The modular approach will make it scalable and maintainable. However, being a banking application, special attention should be paid to security features and testing.
+
+
+Sign-in screen demo:
+[Screen_recording_20250729_130808.webm](https://github.com/user-attachments/assets/82deb2ef-7911-4d90-b2e5-16335b8630af)
