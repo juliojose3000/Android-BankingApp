@@ -89,9 +89,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Note**: This project is under active development. Screenshots and additional documentation will be added as the project progresses.
 
-[Add screenshots here once available]
+## Screenshoots
 
-![SigninScreenAnimations](https://github.com/user-attachments/assets/18d021e5-1c83-48ab-a9fd-3e12c2cad643)
+![SigninScreenAnimations](https://github.com/user-attachments/assets/775a1339-dd8d-4b2e-8645-3fa861d072d7)
 
 
 
