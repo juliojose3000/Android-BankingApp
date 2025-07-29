@@ -91,5 +91,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 [Add screenshots here once available]
 
+![SigninScreenAnimations](https://github.com/user-attachments/assets/18d021e5-1c83-48ab-a9fd-3e12c2cad643)
+
+
+
 ## 🔐 Security
 This application implements modern security practices for banking applications. Specific security features and implementations are not disclosed for security reasons.
