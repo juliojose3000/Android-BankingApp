@@ -82,9 +82,6 @@ The app implements Clean Architecture with the following layers:
 4. Push to the branch
 5. Open a Pull Request
 
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ---
 
 **Note**: This project is under active development. Screenshots and additional documentation will be added as the project progresses.
