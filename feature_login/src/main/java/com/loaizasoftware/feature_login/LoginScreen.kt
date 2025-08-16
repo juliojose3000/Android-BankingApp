@@ -149,18 +149,18 @@ fun LoginScreen(viewModel: LoginViewModel) {
                 .fillMaxSize()
                 .padding(padding)
                 .graphicsLayer {
-                    renderEffect = if (blurRadius > 0f) {
-                        RenderEffect
-                            .createBlurEffect(
-                                blurRadius,
-                                blurRadius,
-                                Shader.TileMode.CLAMP
-                            )
-                            .asComposeRenderEffect()
-                    } else {
-                        null
-                    }
+                renderEffect = if (blurRadius > 0f && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    RenderEffect
+                        .createBlurEffect(
+                            blurRadius,
+                            blurRadius,
+                            Shader.TileMode.CLAMP
+                        )
+                        .asComposeRenderEffect()
+                } else {
+                    null
                 }
+            }
         ) {
 
             // Your main content
