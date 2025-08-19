@@ -2,6 +2,7 @@ package com.loaizasoftware.feature_login.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -103,9 +104,13 @@ fun Body(
                     }
                 },
                 secondContent = {
-                    SignInWithFingerprint {
-                        signInWithPassword = true
-                    }
+                    SignInWithFingerprint(
+                        labelAction = {
+                            signInWithPassword = true
+                        }, signInWithFingerprintClick = {
+                            //Trigger the sign in with finger print logic
+                        }
+                    )
                 }
             )
         }
@@ -114,7 +119,7 @@ fun Body(
 }
 
 @Composable
-fun SignInWithFingerprint(labelAction: () -> Unit) {
+fun SignInWithFingerprint(labelAction: () -> Unit, signInWithFingerprintClick: () -> Unit) {
 
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -140,8 +145,10 @@ fun SignInWithFingerprint(labelAction: () -> Unit) {
             Icon(
                 painter = painterResource(id = R.drawable.fingerprint),
                 contentDescription = "",
-                modifier = Modifier.size(40.dp),
-                tint = BankingColors.Blue
+                modifier = Modifier
+                    .clickable { signInWithFingerprintClick() }
+                    .size(40.dp),
+                tint = BankingColors.Blue,
             )
 
         }
@@ -155,7 +162,11 @@ fun SignInWithFingerprint(labelAction: () -> Unit) {
 }
 
 @Composable
-fun SignInWithPassword(password: String, setPasswordValue: (String) -> Unit, labelAction: () -> Unit) {
+fun SignInWithPassword(
+    password: String,
+    setPasswordValue: (String) -> Unit,
+    labelAction: () -> Unit
+) {
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
@@ -166,7 +177,10 @@ fun SignInWithPassword(password: String, setPasswordValue: (String) -> Unit, lab
             setTextFieldValue = setPasswordValue
         )
 
-        ClickableLabel(stringResource(R.string.cannot_sign_in), horizontalArrangement = Arrangement.End) {
+        ClickableLabel(
+            stringResource(R.string.cannot_sign_in),
+            horizontalArrangement = Arrangement.End
+        ) {
             //Add action
         }
 
@@ -218,7 +232,7 @@ fun ClickableLabel(
             fontWeight = FontWeight(600)
         )
 
-        if(trailingIcon != null) {
+        if (trailingIcon != null) {
             Icon(
                 painter = painterResource(trailingIcon),
                 contentDescription = "",

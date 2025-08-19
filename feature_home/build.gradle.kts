@@ -2,14 +2,10 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose) //Enable Compose
-
-    id("com.google.devtools.ksp")  //Kotlin Symbol Processing
-    //id("com.google.dagger.hilt.android")
-
 }
 
 android {
-    namespace = "com.loaizasoftware.feature_login"
+    namespace = "com.loaizasoftware.feature_home"
     compileSdk = 35
 
     defaultConfig {
@@ -46,17 +42,12 @@ dependencies {
     // 📦 MODULE DEPENDENCIES
     // ------------------------------------------------------
 
-    implementation(project(":core"))
-    implementation(project(":core_ui"))
-    implementation(project(":domain"))
-    implementation(project(":feature_home"))
-
     // ----------------------------
     // 🔷 ANDROID X
     // ----------------------------
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0") // Lifecycle ViewModel
 
     // ----------------------------
     // 🧩 COMPOSE CORE
@@ -67,20 +58,11 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1") //Constraint Layout
 
-    // ------------------------------------------------------
-    // 🔐 DEPENDENCY INJECTION
-    // ------------------------------------------------------
-
-    //Hilt
-    implementation("com.google.dagger:hilt-android:2.56.2")
-    ksp("com.google.dagger:hilt-android-compiler:2.56.2")
-
 
     // ----------------------------
     // 🧪 JVM UNIT TESTS (test/)
     // ----------------------------
 
-    debugImplementation(libs.ui.tooling)
     testImplementation(libs.junit)
 
     // ----------------------------
@@ -89,5 +71,5 @@ dependencies {
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
+    debugImplementation(libs.androidx.compose.ui.ui.tooling)
 }
