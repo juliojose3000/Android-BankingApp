@@ -34,10 +34,25 @@ android {
 
 dependencies {
 
+    // ----------------------------
+    // 🔷 ANDROID X
+    // ----------------------------
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+
+
+    // ----------------------------
+    // 🧪 JVM UNIT TESTS (test/)
+    // ----------------------------
+
     testImplementation(libs.junit)
+
+    // ----------------------------
+    // 🧪 ANDROID INSTRUMENTED TESTS (androidTest/)
+    // ----------------------------
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
 }

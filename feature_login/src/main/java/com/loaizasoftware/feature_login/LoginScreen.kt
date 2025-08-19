@@ -7,8 +7,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,7 +28,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
@@ -40,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.loaizasoftware.core.ext.showToast
 import com.loaizasoftware.core.utils.UiState
 import com.loaizasoftware.core_ui.composables.Loader
+import com.loaizasoftware.core_ui.extensions.noRippleClickable
 import com.loaizasoftware.core_ui.resources.BankingColors
 import com.loaizasoftware.feature_login.composables.MainContainer
 import com.loaizasoftware.feature_login.composables.FooterContent
@@ -151,18 +149,18 @@ fun LoginScreen(viewModel: LoginViewModel) {
                 .fillMaxSize()
                 .padding(padding)
                 .graphicsLayer {
-                    renderEffect = if (blurRadius > 0f) {
-                        RenderEffect
-                            .createBlurEffect(
-                                blurRadius,
-                                blurRadius,
-                                Shader.TileMode.CLAMP
-                            )
-                            .asComposeRenderEffect()
-                    } else {
-                        null
-                    }
+                renderEffect = if (blurRadius > 0f && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    RenderEffect
+                        .createBlurEffect(
+                            blurRadius,
+                            blurRadius,
+                            Shader.TileMode.CLAMP
+                        )
+                        .asComposeRenderEffect()
+                } else {
+                    null
                 }
+            }
         ) {
 
             // Your main content
@@ -202,19 +200,10 @@ fun LoginScreen(viewModel: LoginViewModel) {
                     }
             )
 
-
         }
 
     }
 
-}
-
-inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
-    clickable(
-        indication = null,
-        interactionSource = remember { MutableInteractionSource() }) {
-        onClick()
-    }
 }
 
 @Composable

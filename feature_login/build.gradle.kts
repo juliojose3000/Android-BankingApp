@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose) //Enable Compose
 
     id("com.google.devtools.ksp")  //Kotlin Symbol Processing
-    id("com.google.dagger.hilt.android")
+    //id("com.google.dagger.hilt.android")
 
 }
 
@@ -42,6 +42,10 @@ android {
 
 dependencies {
 
+    // ------------------------------------------------------
+    // 📦 MODULE DEPENDENCIES
+    // ------------------------------------------------------
+
     implementation(project(":core"))
     implementation(project(":core_ui"))
     implementation(project(":domain"))
@@ -71,8 +75,17 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
 
+    // ----------------------------
+    // 🧪 JVM UNIT TESTS (test/)
+    // ----------------------------
+
     debugImplementation(libs.ui.tooling)
     testImplementation(libs.junit)
+
+    // ----------------------------
+    // 🧪 ANDROID INSTRUMENTED TESTS (androidTest/)
+    // ----------------------------
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 

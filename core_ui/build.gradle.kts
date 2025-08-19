@@ -38,9 +38,12 @@ android {
 
 dependencies {
 
+    // ----------------------------
+    // 🔷 ANDROID X
+    // ----------------------------
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
 
     // ----------------------------
     // 🧩 COMPOSE CORE
@@ -50,8 +53,16 @@ dependencies {
     implementation("androidx.compose.material3:material3") //To use Box, Column, Row, Scaffold, etc
     implementation("androidx.compose.ui:ui-tooling-preview")
 
+    // ----------------------------
+    // 🧪 JVM UNIT TESTS (test/)
+    // ----------------------------
 
     testImplementation(libs.junit)
+
+    // ----------------------------
+    // 🧪 ANDROID INSTRUMENTED TESTS (androidTest/)
+    // ----------------------------
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

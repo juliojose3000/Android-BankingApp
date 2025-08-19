@@ -1,7 +1,5 @@
 package com.loaizasoftware.feature_login.composables
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -41,11 +41,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.loaizasoftware.core_ui.anim.SlideInUpAnim
 import com.loaizasoftware.core_ui.anim.SlideSwitcherAnim
+import com.loaizasoftware.core_ui.extensions.noRippleClickable
 import com.loaizasoftware.core_ui.resources.BankingColors
 import com.loaizasoftware.feature_login.R
-import com.loaizasoftware.feature_login.noRippleClickable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -80,7 +79,7 @@ fun Body(
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.sign_in_greeting),
+                text = stringResource(R.string.greeting),
                 style = TextStyle(color = Color.Gray, fontWeight = FontWeight.Medium)
             )
 
@@ -89,8 +88,8 @@ fun Body(
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
             LabeledInputField(
-                textLabel = stringResource(R.string.sign_in_user),
-                textFieldPlaceholder = stringResource(R.string.sign_in_placeholder_username),
+                textLabel = stringResource(R.string.user),
+                textFieldPlaceholder = stringResource(R.string.placeholder_username),
                 textFieldValue = username,
                 setTextFieldValue = setUsernameValue
             )
@@ -124,7 +123,7 @@ fun SignInWithFingerprint(labelAction: () -> Unit) {
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.sign_in_with_fingerprint),
+            text = stringResource(R.string.with_fingerprint),
             textAlign = TextAlign.Center,
             color = Color.Gray,
             fontWeight = FontWeight(600)
@@ -147,7 +146,7 @@ fun SignInWithFingerprint(labelAction: () -> Unit) {
 
         }
 
-        ClickableLabel(stringResource(R.string.sign_in_with_password)) {
+        ClickableLabel(stringResource(R.string.with_password)) {
             labelAction()
         }
 
@@ -161,13 +160,34 @@ fun SignInWithPassword(password: String, setPasswordValue: (String) -> Unit, lab
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
         LabeledInputField(
-            textLabel = stringResource(R.string.sign_in_password),
-            textFieldPlaceholder = stringResource(R.string.sign_in_placeholder_password),
+            textLabel = stringResource(R.string.password),
+            textFieldPlaceholder = stringResource(R.string.placeholder_password),
             textFieldValue = password,
             setTextFieldValue = setPasswordValue
         )
 
-        ClickableLabel(stringResource(R.string.sign_in_or_with_fingerprint)) {
+        ClickableLabel(stringResource(R.string.cannot_sign_in), horizontalArrangement = Arrangement.End) {
+            //Add action
+        }
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(),
+            onClick = {},
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = BankingColors.Blue
+            )
+        ) {
+            Text(
+                text = stringResource(R.string.sign_in),
+            )
+        }
+
+        ClickableLabel(
+            text = stringResource(R.string.or_with_fingerprint),
+            trailingIcon = R.drawable.fingerprint
+        ) {
             labelAction()
         }
 
@@ -176,17 +196,40 @@ fun SignInWithPassword(password: String, setPasswordValue: (String) -> Unit, lab
 }
 
 @Composable
-fun ClickableLabel(text: String, action: () -> Unit) {
+fun ClickableLabel(
+    text: String,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
+    trailingIcon: Int? = null,
+    action: () -> Unit,
+) {
 
-    Text(
+    Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .noRippleClickable { action() },
-        text = stringResource(R.string.sign_in_or_with_fingerprint),
-        textAlign = TextAlign.Center,
-        color = BankingColors.Blue,
-        fontWeight = FontWeight(600)
-    )
+            .fillMaxWidth(),
+        horizontalArrangement = horizontalArrangement,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Text(
+            modifier = Modifier
+                .noRippleClickable { action() },
+            text = text,
+            color = BankingColors.Blue,
+            fontWeight = FontWeight(600)
+        )
+
+        if(trailingIcon != null) {
+            Icon(
+                painter = painterResource(trailingIcon),
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .size(15.dp),
+                tint = BankingColors.Blue
+            )
+        }
+
+    }
 
 }
 

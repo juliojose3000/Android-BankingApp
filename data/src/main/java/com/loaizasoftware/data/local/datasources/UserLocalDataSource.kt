@@ -7,9 +7,9 @@ import com.loaizasoftware.domain.models.SignInRequest
 import com.loaizasoftware.domain.models.SignInResponse
 import com.loaizasoftware.domain.models.User
 import kotlinx.coroutines.delay
-import javax.inject.Inject
+//import javax.inject.Inject
 
-class UserLocalDataSource @Inject constructor(private val userDao: UserDao) {
+class UserLocalDataSource /*@Inject constructor*/(private val userDao: UserDao) {
 
     suspend fun signIn(request: SignInRequest): SignInResponse {
 

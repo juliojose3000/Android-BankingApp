@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 
     id("com.google.devtools.ksp")  //Kotlin Symbol Processing
-    id("com.google.dagger.hilt.android")
+    //id("com.google.dagger.hilt.android")
 
 }
 
@@ -45,6 +45,10 @@ android {
 
 dependencies {
 
+    // ------------------------------------------------------
+    // 📦 MODULE DEPENDENCIES
+    // ------------------------------------------------------
+
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":feature_login"))
@@ -74,11 +78,25 @@ dependencies {
     // ------------------------------------------------------
 
     //Hilt
-    implementation("com.google.dagger:hilt-android:2.56.2")
-    ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+    //implementation("com.google.dagger:hilt-android:2.56.2")
+    //ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
+    //Koin
+    implementation("io.insert-koin:koin-android:3.5.0")
+    implementation("io.insert-koin:koin-core:3.5.0")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.0") // if using Compose
+
+
+    // ----------------------------
+    // 🧪 JVM UNIT TESTS (test/)
+    // ----------------------------
 
     testImplementation(libs.junit)
+
+    // ----------------------------
+    // 🧪 ANDROID INSTRUMENTED TESTS (androidTest/)
+    // ----------------------------
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

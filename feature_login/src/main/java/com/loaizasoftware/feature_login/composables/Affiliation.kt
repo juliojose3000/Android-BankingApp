@@ -35,7 +35,7 @@ fun AffiliationBox(modifier: Modifier) {
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = stringResource(R.string.sign_in_client_or_create_user),
+            text = stringResource(R.string.client_or_create_user),
             color = Color.Gray
         )
 
