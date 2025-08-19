@@ -1,44 +1,24 @@
 package com.loaizasoftware.bankingapp.injection
 
-import android.content.Context
 import com.loaizasoftware.data.local.AppDatabase
 import com.loaizasoftware.data.local.dao.UserDao
 import com.loaizasoftware.data.local.datasources.UserLocalDataSource
 import com.loaizasoftware.data.repository.UserRepositoryImpl
 import com.loaizasoftware.domain.repository.UserRepository
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.loaizasoftware.domain.usecases.UserSignInUseCase
+import com.loaizasoftware.feature_login.LoginViewModel
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-class AppModule {
+val appModule = module {
+    single<AppDatabase> { AppDatabase.getDatabase(androidContext()) }
+    single<UserDao> { get<AppDatabase>().userDao() }
+    single<UserLocalDataSource> { UserLocalDataSource(get<UserDao>()) }
+    single<UserRepository> { UserRepositoryImpl(get<UserLocalDataSource>()) }
+}
 
-    @Provides
-    @Singleton
-    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return AppDatabase.getDatabase(context)
-    }
-
-    @Provides
-    @Singleton
-    fun providesUserDao(appDatabase: AppDatabase): UserDao {
-        return appDatabase.userDao()
-    }
-
-    @Provides
-    @Singleton
-    fun providesUserLocalDataSource(userDao: UserDao): UserLocalDataSource {
-        return UserLocalDataSource(userDao)
-    }
-
-    @Provides
-    @Singleton
-    fun providesUserRepository(userLocalDataSource: UserLocalDataSource): UserRepository {
-        return UserRepositoryImpl(userLocalDataSource)
-    }
-
+val loginModule = module {
+    viewModel { LoginViewModel(signInUseCase = get()) }
+    single<UserSignInUseCase> { UserSignInUseCase(get<UserRepository>()) }
 }

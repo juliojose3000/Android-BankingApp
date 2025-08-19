@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 
     id("com.google.devtools.ksp")  //Kotlin Symbol Processing
-    id("com.google.dagger.hilt.android")
+    //id("com.google.dagger.hilt.android")
 
 }
 
@@ -38,19 +38,30 @@ android {
 
 dependencies {
 
+    // ------------------------------------------------------
+    // 📦 MODULE DEPENDENCIES
+    // ------------------------------------------------------
+
     implementation(project(":domain"))
+
+    // ----------------------------
+    // 🔷 ANDROID X
+    // ----------------------------
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
 
     // ------------------------------------------------------
     // 🔐 DEPENDENCY INJECTION
     // ------------------------------------------------------
 
     //Hilt
-    implementation("com.google.dagger:hilt-android:2.56.2")
-    ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+    //implementation("com.google.dagger:hilt-android:2.56.2")
+    //ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+
+    implementation("io.insert-koin:koin-android:3.5.0")
+    implementation("io.insert-koin:koin-core:3.5.0")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.0") // if using Compose
 
 
     // ------------------------------------------------------
@@ -63,7 +74,17 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:2.7.2") // For Java
     ksp("androidx.room:room-compiler:2.7.2") // For Kotlin
 
+
+    // ----------------------------
+    // 🧪 JVM UNIT TESTS (test/)
+    // ----------------------------
+
     testImplementation(libs.junit)
+
+    // ----------------------------
+    // 🧪 ANDROID INSTRUMENTED TESTS (androidTest/)
+    // ----------------------------
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
