@@ -8,7 +8,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.loaizasoftware.core.ext.showToast
 import com.loaizasoftware.core.utils.UiState
@@ -41,7 +39,6 @@ import com.loaizasoftware.core_ui.extensions.noRippleClickable
 import com.loaizasoftware.core_ui.resources.BankingColors
 import com.loaizasoftware.feature_login.composables.MainContainer
 import com.loaizasoftware.feature_login.composables.FooterContent
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 
@@ -54,6 +51,12 @@ fun LoginScreen(viewModel: LoginViewModel) {
     val context = LocalContext.current
     val sheetState = rememberBottomSheetScaffoldState()
     val scope = rememberCoroutineScope() // Add this for coroutine scope
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.showToastMessage.collect {
+            context showToast it
+        }
+    }
 
     // Animated blur radius based on sheet expansion
     /*val blurRadius by animateFloatAsState(
@@ -175,6 +178,7 @@ fun LoginScreen(viewModel: LoginViewModel) {
 
                 is UiState.Success -> {
                     MainContainer(
+                        viewModel = viewModel,
                         paddingValues = padding,
                         onClick = { },
                         setUsernameValue = viewModel::setUsernameValue,
@@ -206,7 +210,7 @@ fun LoginScreen(viewModel: LoginViewModel) {
 
 }
 
-@Composable
+/*@Composable
 @Preview
 fun PreviewBuildUI() {
 
@@ -219,4 +223,4 @@ fun PreviewBuildUI() {
         passwordTextFieldValue = MutableStateFlow(""),
     )
 
-}
+}*/
