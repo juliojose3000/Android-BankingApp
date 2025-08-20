@@ -241,6 +241,7 @@ fun SignInWithPassword(
         ) {
             Text(
                 text = stringResource(R.string.sign_in),
+                color = Color.White,
             )
         }
 
