@@ -18,10 +18,12 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.loaizasoftware.core_ui.resources.BankingColors
+import com.loaizasoftware.feature_login.LoginViewModel
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun MainContainer(
+    viewModel: LoginViewModel,
     paddingValues: PaddingValues,
     onClick: () -> Unit,
     setUsernameValue: (String) -> Unit,
@@ -80,6 +82,7 @@ fun MainContainer(
 
         Body(
             modifier = bodyModifier,
+            viewModel = viewModel,
             setUsernameValue = setUsernameValue,
             usernameTextFieldValue = usernameTextFieldValue,
             setPasswordValue = setPasswordValue,

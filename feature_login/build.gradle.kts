@@ -75,6 +75,13 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
+    // ------------------------------------------------------
+    // 🧰 Utilities
+    // ------------------------------------------------------
+
+    //Fingerprint API
+    implementation("androidx.biometric:biometric:1.1.0")
+
 
     // ----------------------------
     // 🧪 JVM UNIT TESTS (test/)

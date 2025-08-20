@@ -18,4 +18,14 @@
     <string name="locate_us">Ubícanos</string>
     <string name="offers">Promosiones</string>
     <string name="compass">Compass</string>
+
+    <!-- Biometric login -->
+    <string name="biometric_login_title">Inicio de sesión biométrico</string>
+    <string name="biometric_login_subtitle">Usa tu huella digital o rostro para autenticarte</string>
+    <string name="cancel">Cancelar</string>
+    <string name="biometric_not_available">La autenticación biométrica no está disponible</string>
+    <string name="biometric_authentication_failed">La autenticación falló</string>
+    <string name="biometric_authentication_error">Error de autenticación: %s</string>
+
+
 </resources>
