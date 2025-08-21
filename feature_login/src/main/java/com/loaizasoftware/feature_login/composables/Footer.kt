@@ -24,7 +24,8 @@ import com.loaizasoftware.feature_login.R
 @Composable
 fun FooterContent(
     onItemClick: (String) -> Unit = {},
-    isExpanded: Boolean = false
+    isExpanded: Boolean = false,
+    modifier: Modifier
 ) {
     val footerActions: List<Triple<Int, Int, String>> = listOf(
         Triple(R.drawable.currency_exchange, R.string.currency_exchange, "exchange"),
@@ -39,9 +40,7 @@ fun FooterContent(
     )
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp)
+        modifier = modifier
     ) {
         // Always visible footer actions
         Row(

@@ -3,12 +3,13 @@ package com.loaizasoftware.feature_login
 import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -31,21 +32,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.loaizasoftware.core.ext.showToast
 import com.loaizasoftware.core.utils.UiState
 import com.loaizasoftware.core_ui.composables.Loader
 import com.loaizasoftware.core_ui.extensions.noRippleClickable
 import com.loaizasoftware.core_ui.resources.BankingColors
-import com.loaizasoftware.feature_login.composables.MainContainer
 import com.loaizasoftware.feature_login.composables.FooterContent
+import com.loaizasoftware.feature_login.composables.MainContainer
 import kotlinx.coroutines.launch
 
 
-@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(viewModel: LoginViewModel) {
+fun LoginScreen(viewModel: LoginViewModel, navBarHeightDp: Dp) {
 
     val uiState = viewModel.uiState.collectAsState().value
     val context = LocalContext.current
@@ -112,24 +113,47 @@ fun LoginScreen(viewModel: LoginViewModel) {
     BottomSheetScaffold(
         modifier = Modifier
             .fillMaxSize() // Apply the modifier to the scaffold
+            .fillMaxWidth()
             .background(Color.Blue),
         scaffoldState = sheetState, // Pass the state
         sheetContent = {
-            FooterContent(
-                onItemClick = { action ->
-                    // Expand when footer item is clicked
-                    scope.launch {
-                        if (!sheetState.bottomSheetState.isVisible) {
-                            sheetState.bottomSheetState.expand()
-                        } else {
-                            sheetState.bottomSheetState.partialExpand()
+
+            Column(
+                modifier = Modifier
+                    .height(170.dp + navBarHeightDp)
+                    .fillMaxWidth()
+            ) {
+
+                val modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(24.dp)
+
+                FooterContent(
+                    onItemClick = { action ->
+                        // Expand when footer item is clicked
+                        scope.launch {
+                            if (!sheetState.bottomSheetState.isVisible) {
+                                sheetState.bottomSheetState.expand()
+                            } else {
+                                sheetState.bottomSheetState.partialExpand()
+                            }
                         }
-                    }
-                },
-                isExpanded = sheetState.bottomSheetState.isVisible
-            )
+                    },
+                    isExpanded = sheetState.bottomSheetState.isVisible,
+                    modifier = modifier
+                )
+
+                // Spacer to prevent FooterContent from being overlapped by the system navigation bar
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(navBarHeightDp)
+                )
+            }
+
         },
-        sheetPeekHeight = 110.dp, // Height of the visible bottom sheet
+        sheetPeekHeight = 110.dp + navBarHeightDp, // Height of the visible bottom sheet
         sheetContainerColor = Color.White,
         containerColor = BankingColors.WhiteBackground,
         sheetDragHandle = {
