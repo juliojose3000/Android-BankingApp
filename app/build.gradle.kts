@@ -50,6 +50,7 @@ dependencies {
     // ------------------------------------------------------
 
     implementation(project(":core"))
+    implementation(project(":core_ui"))
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":feature_login"))
